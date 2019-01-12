@@ -25,16 +25,16 @@ Simple Tensorflow implementation of ["Large Scale GAN Training for High Fidelity
 * python main.py --phase test --dataset celebA-HQ --gan_type hinge
 
 ## Architecture
-<img src = './assets/architecture.png' width = '500px' height = '500px'> 
+<img src = './assets/architecture.png' width = '600px'> 
 
 ### 128x128
-<img src = './assets/128.png' width = '500px' height = '500px'> 
+<img src = './assets/128.png' width = '600px'> 
 
 ### 256x256
-<img src = './assets/256.png' width = '500px' height = '500px'> 
+<img src = './assets/256.png' width = '600px'> 
 
 ### 512x512
-<img src = './assets/512.png' width = '500px' height = '500px'> 
+<img src = './assets/512.png' width = '600px'> 
 
 ## Author
 Junho Kim
