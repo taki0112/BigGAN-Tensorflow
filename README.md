@@ -5,6 +5,7 @@ Simple Tensorflow implementation of ["Large Scale GAN Training for High Fidelity
 
 ## Issue
 * **The paper** used `orthogonal initialization`, but `I used random normal initialization.` The reason is, when using the orthogonal initialization, it did not train properly.
+* I have applied a hierarchical latent space, but **not** a class embeddedding.
 
 ## Usage
 ### dataset
