@@ -126,7 +126,7 @@ class BigGAN_128(object):
             x = resblock_up_condition(x, z_split[4], channels=ch, use_bias=False, is_training=is_training, sn=self.sn, scope='resblock_up_2')
 
             # Non-Local Block
-            x = self_attention(x, channels=ch, sn=self.sn, scope='self_attention')
+            x = self_attention_2(x, channels=ch, sn=self.sn, scope='self_attention')
             ch = ch // 2
 
             x = resblock_up_condition(x, z_split[5], channels=ch, use_bias=False, is_training=is_training, sn=self.sn, scope='resblock_up_1')
@@ -150,7 +150,7 @@ class BigGAN_128(object):
             x = resblock_down(x, channels=ch, use_bias=False, is_training=is_training, sn=self.sn, scope='resblock_down_1')
 
             # Non-Local Block
-            x = self_attention(x, channels=ch, sn=self.sn, scope='self_attention')
+            x = self_attention_2(x, channels=ch, sn=self.sn, scope='self_attention')
             ch = ch * 2
 
             x = resblock_down(x, channels=ch, use_bias=False, is_training=is_training, sn=self.sn, scope='resblock_down_2')

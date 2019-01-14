@@ -220,12 +220,36 @@ def self_attention(x, channels, sn=False, scope='self_attention'):
         # N = h * w
         s = tf.matmul(hw_flatten(g), hw_flatten(f), transpose_b=True)  # # [bs, N, N]
 
-        beta = tf.nn.softmax(s, axis=-1)  # attention map
+        beta = tf.nn.softmax(s)  # attention map
 
         o = tf.matmul(beta, hw_flatten(h))  # [bs, N, C]
         gamma = tf.get_variable("gamma", [1], initializer=tf.constant_initializer(0.0))
 
         o = tf.reshape(o, shape=x.shape)  # [bs, h, w, C]
+        x = gamma * o + x
+
+    return x
+
+def self_attention_2(x, channels, sn=False, scope='self_attention'):
+    with tf.variable_scope(scope):
+        f = conv(x, channels // 8, kernel=1, stride=1, sn=sn, scope='f_conv')  # [bs, h, w, c']
+        f = max_pooling(f)
+
+        g = conv(x, channels // 8, kernel=1, stride=1, sn=sn, scope='g_conv')  # [bs, h, w, c']
+
+        h = conv(x, channels // 2, kernel=1, stride=1, sn=sn, scope='h_conv')  # [bs, h, w, c]
+        h = max_pooling(h)
+
+        # N = h * w
+        s = tf.matmul(hw_flatten(g), hw_flatten(f), transpose_b=True)  # # [bs, N, N]
+
+        beta = tf.nn.softmax(s)  # attention map
+
+        o = tf.matmul(beta, hw_flatten(h))  # [bs, N, C]
+        gamma = tf.get_variable("gamma", [1], initializer=tf.constant_initializer(0.0))
+
+        o = tf.reshape(o, shape=[x.shape[0], x.shape[1], x.shape[2], channels // 2])  # [bs, h, w, C]
+        o = conv(o, channels, kernel=1, stride=1, sn=sn, scope='attn_conv')
         x = gamma * o + x
 
     return x
@@ -243,6 +267,10 @@ def global_sum_pooling(x) :
     gsp = tf.reduce_sum(x, axis=[1, 2])
 
     return gsp
+
+def max_pooling(x) :
+    x = tf.layers.max_pooling2d(x, pool_size=2, strides=2, padding='SAME')
+    return x
 
 def up_sample(x, scale_factor=2):
     _, h, w, _ = x.get_shape().as_list()
